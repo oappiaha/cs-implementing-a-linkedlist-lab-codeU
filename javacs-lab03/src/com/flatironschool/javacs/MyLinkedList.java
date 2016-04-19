@@ -85,7 +85,60 @@ public class MyLinkedList<E> implements List<E> {
 
 	@Override
 	public void add(int index, E element) {
-		// TODO: fill this in
+		
+		if (index < 0 || index > size) {
+			throw new IndexOutOfBoundsException();
+		}
+
+		if (head == null){
+			Node answer = new Node(element);
+			head = answer;
+			size++;
+			return;
+		}
+		int count = 1;
+		Node bop = head;
+		Node prev = head;
+		if (index == 0 && size != 0){
+			Node answer = new Node(element);
+			answer.next = head;
+			head = answer;
+			size++;
+			return;
+		}
+		// else if(index == size){
+		// 	Node answer = new Node(element);
+		// 	while(bop != null){
+		// 		if (bop.next == null){
+		// 			bop.next = answer;
+		// 		}
+		// 		bop = bop.next;
+		// 	}
+		// }
+		
+		
+		while(prev != null){
+			bop = prev.next;
+			if (bop == null){
+				Node answer = new Node(element);
+				prev.next = answer;
+				answer.next = bop;
+				size++;
+				return;
+			}
+			if (equals(index,count)){
+				Node answer = new Node(element);
+				prev.next = answer;
+				answer.next = bop;
+				size++;
+				return;
+			}
+			count++;
+			prev = prev.next;
+			
+
+		}
+
 	}
 
 	@Override
@@ -126,6 +179,7 @@ public class MyLinkedList<E> implements List<E> {
 	@Override
 	public E get(int index) {
 		Node node = getNode(index);
+
 		return node.cargo;
 	}
 
@@ -146,7 +200,19 @@ public class MyLinkedList<E> implements List<E> {
 
 	@Override
 	public int indexOf(Object target) {
-		// TODO: fill this in
+		if (head == null){
+			return -1;
+		}
+		Node bop = head;
+		int count = 0;
+		while (bop != null){
+			E val = bop.cargo;
+			if (equals(target,val)){
+				return count;
+			}
+			bop = bop.next;
+			count++;
+			}
 		return -1;
 	}
 
@@ -201,13 +267,36 @@ public class MyLinkedList<E> implements List<E> {
 
 	@Override
 	public boolean remove(Object obj) {
-		// TODO: fill this in
-		return false;
+		int index = indexOf(obj);
+		if (index == -1) {
+			return false;
+		}
+		remove(index);
+		return true;
 	}
-
+		
 	@Override
 	public E remove(int index) {
-		// TODO: fill this in
+		if (index == 0) {
+			E val = head.cargo;
+			head = head.next;
+			size--;
+			return val;
+		}
+		Node ref = head;
+		Node prev = head;
+		int count = 0;
+		while (ref != null){
+			if (equals(index,count)){
+				E answer = ref.cargo;
+				prev.next = ref.next;
+				size--;
+				return answer;
+			}
+			prev = ref;
+			ref = ref.next;
+			count++;
+		}
 		return null;
 	}
 
